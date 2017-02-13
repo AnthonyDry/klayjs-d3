@@ -229,7 +229,7 @@ var klay;
           }
         }
         // invoke the 'finish' event
-        dispatch.finish({graph: kgraph});
+        dispatch.call('finish',{graph: kgraph});
       };
     }
     /*
@@ -282,7 +282,7 @@ var klay;
         toAbsolutePositions(kgraph, {x: 0, y:0}, nodeMap);
         toAbsolutePositionsEdges(kgraph, nodeMap);
         // invoke the 'finish' event
-        dispatch.finish({graph: kgraph});
+        dispatch.call('finish',{graph: kgraph});
       };
       var toAbsolutePositions = function(n, offset, nodeMap) {
         n.x = (n.x || 0) + offset.x;
@@ -368,8 +368,12 @@ var klay;
         transformGroup.attr("transform", "scale(" + scale + ")");
       }
     }
+    d3klay.on = function() {
+      var value = dispatch.on.apply(dispatch, arguments);
+      return value === dispatch ? d3klay : value;
+    };
     // return the layouter object
-    return d3.rebind(d3klay, dispatch, "on");
+    return d3klay;
   }
   if (typeof module === "object" && module.exports) {
     module.exports = klay;
